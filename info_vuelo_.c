@@ -1,7 +1,5 @@
 #include "info_vuelos_.h"
 
-void mostar_vuelo(vuelo_t *vuelo);
-
 bool info_vuelos(hash_t *hash, char *codigo_vuelo){
   if ( !hash || !hash_pertenece(hash, codigo_vuelo)) return false;
 
