@@ -2,7 +2,7 @@
 #include "hash.h"
 #include "lista.h"
 #include "abb.h"
-#include "struct_vuelo.c"
+#include "estructuras.c"
 #include <stdbool.h>
 #include <stdlib.h>
 
