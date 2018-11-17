@@ -1,6 +1,2 @@
 # tp2-7541
-Sistema para aeropuerto
-Code: C
-Programmers:
-  Gabriela
-  Leonel
+proyecto subido desde el ssh
