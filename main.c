@@ -8,5 +8,6 @@ int main(){
   fprintf(stdout, "%s\n", "~~ test" );
   prueba1();
   prueba2();
+  prueba3();
   return 0;
 }
