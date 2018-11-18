@@ -7,5 +7,6 @@
 int main(){
   fprintf(stdout, "%s\n", "~~ test" );
   prueba1();
+  prueba2();
   return 0;
 }

@@ -8,3 +8,4 @@
 
 
 bool prueba1();
+bool prueba2();
