@@ -18,6 +18,83 @@ int lenstrv(char **);
 void destruir_dato_wrapper(void *);
 bool agregar_archivo(char **, hash_t *);
 
+//prioridad vuelos
+bool prioridad_vuelos(char **comandos,hash_t* hash);
+
+
+int heap_min_cmp(const void* a,const void* b);
+int heap_max_cmp(const void* a,const void* b);
+
+//Función de comparación para estructura heap de máximos
+int heap_max_cmp(const void* a,const void* b){
+	char** vuelo1 = (char**)a;
+	char** vuelo2 = (char**)b;
+	int prioridad1 = atoi(vuelo1[priority]);
+	int prioridad2 = atoi(vuelo2[priority]);
+	if(prioridad1>prioridad2) return 1;
+	else if(prioridad1<prioridad2) return -1;
+	else{
+		int codigo1 = atoi(vuelo1[flight_number]);
+		int codigo2 = atoi(vuelo2[flight_number]);
+		if(codigo1 > codigo2) return -1;
+		return 1;
+	}
+}
+//Función de comparación para estructura heap de mínimos
+int heap_min_cmp(const void* a,const void* b){
+	if(heap_max_cmp(a,b)>0) return -1;
+	return 1;
+}
+
+//muestra los códigos de los K vuelos que tienen mayor prioridad.
+bool prioridad_vuelos(char **comandos,hash_t* hash){
+	if ( lenstrv(comandos) != 2 )return false;
+	int K = atoi(comandos[1]);
+	heap_t* heap = heap_crear(heap_min_cmp);
+	if(heap==NULL) return false;
+	hash_iter_t* iter = hash_iter_crear(hash);
+	if(iter==NULL){
+		heap_destruir(heap,NULL);
+		return false;
+	}
+	//Crea un heap de mínimos de tamaño k con los primeros k elementos.
+	for(int i = 0;i<K;i++){
+		if(!hash_iter_al_final(iter)){
+			char** vuelo = hash_obtener(hash,hash_iter_ver_actual(iter));
+			heap_encolar(heap,vuelo);
+			hash_iter_avanzar(iter);
+		}
+	}
+	//Recorre todos los elementos para obtener los k elementos con mayor prioridad.
+	while(!hash_iter_al_final(iter)){
+		char** vuelo = hash_obtener(hash,hash_iter_ver_actual(iter));
+		if(heap_max_cmp(vuelo,heap_ver_max(heap))>0){
+			heap_desencolar(heap);
+			heap_encolar(heap,hash_obtener(hash,hash_iter_ver_actual(iter)));
+		}
+		hash_iter_avanzar(iter);
+	}
+	hash_iter_destruir(iter);
+	heap_t* heap_max = heap_crear(heap_max_cmp);
+	if(heap_max==NULL){
+		heap_destruir(heap,NULL);
+		return false;
+	}
+	//Vacía los k elementos con mayor prioridad en un heap de máximos
+	//obteniendo el orden mayor a menor.
+	while(!heap_esta_vacio(heap)){
+		heap_encolar(heap_max,heap_desencolar(heap));
+	}
+	heap_destruir(heap,NULL);
+	//Muestra los k elementos obtenidos por salida estandar de mayor a menor.
+	while(!heap_esta_vacio(heap_max)){
+		char** vuelo = heap_desencolar(heap_max);
+		fprintf(stdout,"%s - %s\n",vuelo[priority],vuelo[flight_number]);
+	}
+	heap_destruir(heap_max,NULL);
+	return true;
+}
+
 //procesa de forma completa un archivo de .csv que contiene datos de vuelos.
 int lenstrv(char **strv){
 	if (!strv) return -1;
@@ -76,7 +153,7 @@ bool info_vuelo(char** comandos, hash_t* hash){
 
 
 //test agregar archivo
-bool prueba1(){
+void prueba1(){
   hash_t *h = hash_crear(destruir_dato_wrapper);
 
   char **comando = split("agregar_archivo vuelos-algueiza-parte-01.csv",' ');
@@ -87,11 +164,9 @@ bool prueba1(){
   hash_destruir(h);
 
   free_strv(comando);
-
-  return true;
 }
 
-bool prueba2(){
+void prueba2(){
   hash_t *h = hash_crear(destruir_dato_wrapper);
 
   char **comando = split("agregar_archivo vuelos-algueiza-parte-01.csv",' ');
@@ -105,6 +180,23 @@ bool prueba2(){
 
   free_strv(comando);
   free_strv(infocomando);
+}
 
-  return true;
+void prueba3(){
+  hash_t *h = hash_crear(destruir_dato_wrapper);
+
+  char **comando = split("agregar_archivo vuelos-algueiza-parte-01.csv",' ');
+  char **prioridadvuelos = split("prioridad_vuelos 20", ' ');
+  fprintf(stdout, "\n%s\n","~~Prioridad vuelos~~~" );
+  bool ok = agregar_archivo(comando,h);
+  fprintf(stdout, "%s\n", ok ? "carga los datos al hash.. OK" : "carga los datos al hash.. ERROR" );
+
+  ok = prioridad_vuelos(prioridadvuelos,h);
+
+  fprintf(stdout, "%s\n", ok ? "OK" : "carga los datos al hash.. ERROR" );
+
+  hash_destruir(h);
+
+  free_strv(comando);
+  free_strv(prioridadvuelos);
 }
