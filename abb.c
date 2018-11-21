@@ -59,6 +59,7 @@ struct abb_iter{
   const char* inicio; //add
   const char* fin; //add
   int modo;
+  abb_comparar_clave_t cmp; //agrego para el iterador
 };
 
 abb_t* abb_crear(abb_comparar_clave_t cmp, abb_destruir_dato_t destruir_dato){
@@ -333,27 +334,27 @@ void abb_in_order(abb_t* arbol, bool visitar(const char* clave, void* dato, void
  *                         ITERADOR EXTERNO
  ******************************************************************************/
 /*Funcion de apilado especial para que tenga contemplado el caso asc y desc a la vez @Leonel.R */
-void apilar(const abb_t* arbol, abb_iter_t* it, pila_t* pila,abb_nodo_t* nodo){
+void apilar(abb_iter_t* it, pila_t* pila,abb_nodo_t* nodo){
   if (!nodo) return;
 
-  int rango_inicio = arbol->comparar_clave(nodo->clave,it->inicio) >= 0;
-  int rango_fin = arbol->comparar_clave(nodo->clave,it->fin) <= 0;
+  int rango_inicio = it->cmp(nodo->clave,it->inicio) >= 0;
+  int rango_fin = it->cmp(nodo->clave,it->fin) <= 0;
 
   bool esta_en_rango = rango_inicio && rango_fin;
 
   if (esta_en_rango){
     pila_apilar(pila,nodo);
-    apilar(arbol,it,pila, it->modo ? nodo->izquierda : nodo->derecha);
+    apilar(it,pila, it->modo ? nodo->izquierda : nodo->derecha);
     return;
   }
 
   if (it->modo ? rango_inicio : rango_fin){
-    apilar(arbol, it, pila, it->modo ? nodo->izquierda : nodo->derecha);
+    apilar(it, pila, it->modo ? nodo->izquierda : nodo->derecha);
     return;
   }
 
   else{
-    apilar(arbol, it, pila, it->modo ? nodo->derecha : nodo->izquierda);
+    apilar(it, pila, it->modo ? nodo->derecha : nodo->izquierda);
     return;
   }
 }
@@ -368,17 +369,20 @@ abb_iter_t* abb_iter_in_crear(const abb_t* arbol, const char *modo, const char* 
   iter->inicio = inicio;
   iter->fin = fin;
   iter->modo = strcmp(modo,"asc") == 0 ? 1 : 0;
-  apilar(arbol,iter,iter->pila,arbol->raiz);
+  //linea agregada
+  iter->cmp = arbol->comparar_clave;
+
+  apilar(iter,iter->pila,arbol->raiz);
   return iter;
 }
 
-bool abb_iter_in_avanzar(abb_t* arbol,abb_iter_t* iter){
+bool abb_iter_in_avanzar(abb_iter_t* iter){
 
   if (pila_esta_vacia(iter->pila)) return false;
 
   abb_nodo_t* nodo=pila_desapilar(iter->pila);
 
-  apilar(arbol,iter,iter->pila,iter->modo ? nodo->derecha : nodo->izquierda);
+  apilar(iter,iter->pila,iter->modo ? nodo->derecha : nodo->izquierda);
 
   return true;
 }

@@ -31,7 +31,7 @@ typedef struct abb_iter abb_iter_t;
 abb_iter_t *abb_iter_in_crear(const abb_t *,const char *,const char*,const char*);
 
 //se agrego el arbol para el tema de la comparacion para el apilado especial
-bool abb_iter_in_avanzar(abb_t*,abb_iter_t *iter);
+bool abb_iter_in_avanzar(abb_iter_t *iter);
 const char *abb_iter_in_ver_actual(const abb_iter_t *iter);
 bool abb_iter_in_al_final(const abb_iter_t *iter);
 void abb_iter_in_destruir(abb_iter_t* iter);
