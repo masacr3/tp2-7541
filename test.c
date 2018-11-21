@@ -221,7 +221,7 @@ void prueba4(){
 
 	while( !abb_iter_in_al_final(it) ){
 		const char *clave = abb_iter_in_ver_actual(it);
-		abb_iter_in_avanzar(arbol,it);
+		abb_iter_in_avanzar(it);
 		printf("%s\n",clave);
 	}
 
@@ -231,7 +231,7 @@ void prueba4(){
 
 	while( !abb_iter_in_al_final(it2) ){
 		const char *clave = abb_iter_in_ver_actual(it2);
-		abb_iter_in_avanzar(arbol,it2);
+		abb_iter_in_avanzar(it2);
 		printf("%s\n",clave);
 	}
 
