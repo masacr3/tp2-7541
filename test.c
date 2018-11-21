@@ -204,27 +204,40 @@ void prueba3(){
 void prueba4(){
 	abb_t *arbol = abb_crear(strcmp, NULL);
 
-	char *claves[] = {"1","3","5","2","4","6","10","8","9","17"};
+	char *claves[] = {"1","3","5","2","4","6","10","8","9","7"};
 	char *valores[] = {"1","2","3","4","5","6","7","8","9","10"};
 
 	printf("%s\n", "~~~TEST ARBOL BINARIO~~~~\n");
 
 	printf("%s\n","arbol cargado con 1,2,3,4,5,6,7,8,9,10" );
 	printf("%s\n","itera 4 al 8" );
+	printf("%s\n","modo:desc" );
 
 	for (int i = 0; i < 10; i++){
 		abb_guardar(arbol,claves[i],valores[i]);
 	}
 
-	abb_iter_t *it = abb_iter_in_crear(arbol,"asc","4","8");
+	abb_iter_t *it = abb_iter_in_crear(arbol,"desc","4","8");
 
 	while( !abb_iter_in_al_final(it) ){
 		const char *clave = abb_iter_in_ver_actual(it);
 		abb_iter_in_avanzar(arbol,it);
 		printf("%s\n",clave);
 	}
+
+	printf("\n\n%s\n", "modo:asc" );
+
+	abb_iter_t *it2 = abb_iter_in_crear(arbol,"asc","4","8");
+
+	while( !abb_iter_in_al_final(it2) ){
+		const char *clave = abb_iter_in_ver_actual(it2);
+		abb_iter_in_avanzar(arbol,it2);
+		printf("%s\n",clave);
+	}
+
 	printf("ok\n");
 	abb_iter_in_destruir(it);
+	abb_iter_in_destruir(it2);
 	abb_destruir(arbol);
 
 }
