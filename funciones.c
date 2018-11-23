@@ -103,10 +103,27 @@ bool prioridad_vuelos(char **comandos,hash_t* hash){
 bool ver_tablero(char** comandos,abb_t* abb){
 	if ( lenstrv(comandos) != 5 )return false;
 	int K = atoi(comandos[1]);
+
+	//checkeo K
+	if ( K < 1) return false;
+
+	//calcula
 	char* modo = comandos[2];
+
+	//chequear esto
+	bool ok = strcmp(modo,"asc") == 0 || strcmp(modo,"desc");
+
+	if (!ok ) return false;
+
 	char* desde = comandos[3];
 	char* hasta = comandos[4];
-  	int date = 0; //para que no genere colisiones con los define
+
+	time_t t1 = iso8601_to_time(desde); //tiempos
+	time_t t2 = iso8601_to_time(hasta); //tiempos
+
+	if ( difftime(t2,t1) < 0) return false;
+
+  int date = 0; //para que no genere colisiones con los define
 	int flight_number = 1; //para que no genere colisiones con los define
 	abb_iter_t* iter = abb_iter_in_crear(abb,abb_it_cmp,modo,desde,hasta);
 	if(!iter) return false;
@@ -177,7 +194,7 @@ bool ejecutar_operacion(char **comandos,hash_t* hash,abb_t* abb){
 	else if ( strcmp ( comandos[0],"ver_tablero") == 0 )return ver_tablero(comandos,abb);
 
 	else if ( strcmp ( comandos[0],"borrar") == 0 ) return borrar(comandos,abb,hash);
-	
+
 	else if(strcmp(comandos[0],"ver_arbol")==0) return ver_arbol(abb);
 
 	else return false;
@@ -250,7 +267,7 @@ int abb_cmp(const char *a, const char *b){
 	return i;
 }
 
-//Suponemos que a,b tienen datos. 
+//Suponemos que a,b tienen datos.
 int abb_it_cmp(const char *a, const char *b){
 	char **clave1 = split(a,',');
 	char **clave2 = split(b,',');
