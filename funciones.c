@@ -29,11 +29,25 @@ bool agregar_archivo(char **comandos, hash_t* hash,abb_t* abb){
 	return true;
 }
 
+//Muestra toda la información posible en sobre el vuelo que tiene el código pasado por parámetro.
+bool info_vuelo(char** comandos, hash_t* hash){
+	if ( lenstrv(comandos) != 2 )return false;
+	if(hash_cantidad(hash)==0)return false;
+	char** vuelo = hash_obtener(hash, comandos[1]);
+	if(!vuelo)return false;
+	char* linea = join(vuelo,' ');
+	if(!linea) return false;
+	fprintf(stdout,"%s\n",linea);
+	free(linea);
+	return true;
+}
+
+
 
 bool ejecutar_operacion(char **comandos,hash_t* hash,abb_t* abb){
 	if ( strcmp ( comandos[0],"agregar_archivo") == 0 ) return agregar_archivo(comandos,hash,abb);
 
-	//else if ( strcmp ( comandos[0],"info_vuelo") == 0 ) return info_vuelo(comandos,hash);
+	else if ( strcmp ( comandos[0],"info_vuelo") == 0 ) return info_vuelo(comandos,hash);
 
 	//else if ( strcmp ( comandos[0],"prioridad_vuelos") == 0 ) return prioridad_vuelos(comandos,hash);
 

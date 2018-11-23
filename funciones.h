@@ -43,3 +43,5 @@ time_t iso8601_to_time(const char* iso8601);
 
 //funciones principales
 bool agregar_archivo(char **comandos, hash_t* hash,abb_t* abb);
+
+bool info_vuelo(char** comandos, hash_t* hash);

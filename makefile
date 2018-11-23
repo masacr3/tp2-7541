@@ -8,4 +8,4 @@ all:
 run: all
 	./$(EXEC) < test.txt
 val: all
-	valgrind $(VFLAGS) ./$(EXEC)
+	valgrind $(VFLAGS) ./$(EXEC) < test.txt
