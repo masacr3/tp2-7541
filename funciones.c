@@ -17,7 +17,7 @@ bool agregar_archivo(char **comandos, hash_t* hash,abb_t* abb){
 		char** vuelo = split(linea,',');
 		char* clave = empaquetar(vuelo);
 		bool nuevo_nodo = true;
-		char** datos_anteriores = hash_obtener(hash,vuelo[flight_number]);
+		char** datos_anteriores = hash_obtener(hash,vuelo[FLIGHT_NUMBER]);
 		if(datos_anteriores){
 			char* clave_anterior = empaquetar(datos_anteriores);
 			if(strcmp(clave_anterior,clave)==0) nuevo_nodo = false;
@@ -30,7 +30,7 @@ bool agregar_archivo(char **comandos, hash_t* hash,abb_t* abb){
 				return false;
 			}
 		}
-		if(!hash_guardar(hash,vuelo[flight_number],(void*)vuelo))return false;
+		if(!hash_guardar(hash,vuelo[FLIGHT_NUMBER],(void*)vuelo))return false;
 		free(clave);
 	}
 	free(linea);
