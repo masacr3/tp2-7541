@@ -360,7 +360,7 @@ void apilar(abb_iter_t* it, pila_t* pila,abb_nodo_t* nodo){
 }
 
 //modify add modo ,add inicio, fin limits for iteration
-abb_iter_t* abb_iter_in_crear(const abb_t* arbol, const char *modo, const char* inicio, const char* fin){
+abb_iter_t* abb_iter_in_crear(const abb_t* arbol,abb_comparar_clave_t cmp, const char *modo, const char* inicio, const char* fin){
   abb_iter_t* iter=malloc(sizeof(abb_iter_t));
 
   if (!iter) return NULL;
@@ -370,7 +370,7 @@ abb_iter_t* abb_iter_in_crear(const abb_t* arbol, const char *modo, const char* 
   iter->fin = fin;
   iter->modo = strcmp(modo,"asc") == 0 ? 1 : 0;
   //linea agregada
-  iter->cmp = arbol->comparar_clave;
+  iter->cmp = cmp;
 
   apilar(iter,iter->pila,arbol->raiz);
   return iter;

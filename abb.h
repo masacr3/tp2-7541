@@ -28,7 +28,7 @@ void abb_destruir(abb_t *arbol);
 typedef struct abb_iter abb_iter_t;
 
 //se modifico el crear del iterador
-abb_iter_t *abb_iter_in_crear(const abb_t *,const char *,const char*,const char*);
+abb_iter_t *abb_iter_in_crear(const abb_t *,abb_comparar_clave_t cmp,const char *,const char*,const char*);
 
 //se agrego el arbol para el tema de la comparacion para el apilado especial
 bool abb_iter_in_avanzar(abb_iter_t *iter);

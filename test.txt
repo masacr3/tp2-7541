@@ -1,4 +1,5 @@
 agregar_archivo vuelos-algueiza-parte-01.csv
+agregar_archivo vuelos-algueiza-parte-02.csv
 info_vuelo 4608
 prioridad_vuelos 3
 ver_arbol
