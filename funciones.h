@@ -49,3 +49,5 @@ bool info_vuelo(char** comandos, hash_t* hash);
 bool prioridad_vuelos(char **comandos,hash_t* hash);
 
 bool ver_tablero(char** comandos,abb_t* abb);
+
+bool borrar(char **comandos,abb_t* abb,hash_t* hash);
