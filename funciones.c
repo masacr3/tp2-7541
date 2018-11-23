@@ -102,9 +102,13 @@ bool prioridad_vuelos(char **comandos,hash_t* hash){
 
 bool ver_tablero(char** comandos,abb_t* abb){
 	if ( lenstrv(comandos) != 5 )return false;
-	int K = atoi(comandos[1]);
+
+  int K = atoi(comandos[1]);
+  //chequeo el K
+
 	char* modo = comandos[2];
-	char* desde = comandos[3];
+  //chequeo modo
+  char* desde = comandos[3];
 	char* hasta = comandos[4];
   int date = 0; //para que no genere colisiones con los define
   int flight_number = 1; //para que no genere colisiones con los define
@@ -112,7 +116,7 @@ bool ver_tablero(char** comandos,abb_t* abb){
 	if(!iter) return false;
 	int i = 0;
 	while(!abb_iter_in_al_final(iter)&&i<K){
-		char** vuelo = split(abb_iter_in_ver_actual(iter),',');
+    char** vuelo = split(abb_iter_in_ver_actual(iter),',');
 		fprintf(stdout,"%s - %s\n",vuelo[date],vuelo[flight_number]);
 		free_strv(vuelo);
 		abb_iter_in_avanzar(iter);
@@ -137,8 +141,8 @@ bool borrar(char **comandos,abb_t* abb,hash_t* hash){
 	}
 	abb_iter_in_destruir(iter);
 	while(!lista_esta_vacia(elem_rango)){
-		char** clave = split(abb_borrar(abb,lista_borrar_primero(elem_rango)),",");
-		char** vuelo = hash_borrar(hash,clave[1]);
+		char* clave = abb_borrar(abb,lista_borrar_primero(elem_rango));
+		char** vuelo = hash_borrar(hash,clave);
 		free_strv(vuelo);
     free(clave);
 	}
