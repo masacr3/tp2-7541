@@ -1,14 +1,4 @@
-#define _POSIX_C_SOURCE 200809L
-#include <stdio.h>
-#include <string.h>
-#include <stdbool.h>
-#include <stdlib.h>
-#include "time.h"
-#include "strutil.h"
-#include "hash.h"
-#include "abb.h"
-
-#include "funciones_auxiliares.h"
+#include "funciones.h"
 
 int main(){
 	size_t cap = 0;
@@ -23,7 +13,7 @@ int main(){
 		if (!ok) fprintf(stderr,"Error en el comando %s\n",comandos[0]);
 		else fprintf(stdout,"OK\n");
 		free_strv(comandos);
-	} 
+	}
 	abb_destruir(abb);
 	hash_destruir(hash);
 	free(linea);
