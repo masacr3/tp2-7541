@@ -137,9 +137,10 @@ bool borrar(char **comandos,abb_t* abb,hash_t* hash){
 	}
 	abb_iter_in_destruir(iter);
 	while(!lista_esta_vacia(elem_rango)){
-		char* clave = abb_borrar(abb,lista_borrar_primero(elem_rango));
-		char** vuelo = hash_borrar(hash,clave);
+		char** clave = split((const char*)abb_borrar(abb,lista_borrar_primero(elem_rango)),",");
+		char** vuelo = hash_borrar(hash,(const char*)clave[1]);
 		free_strv(vuelo);
+    free(clave);
 	}
 	lista_destruir(elem_rango,NULL);
 	return true;
