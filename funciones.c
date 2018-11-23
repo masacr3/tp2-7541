@@ -15,13 +15,22 @@ bool agregar_archivo(char **comandos, hash_t* hash,abb_t* abb){
 	while((leidos=getline(&linea,&cant,archivo))>0){
 		linea[leidos-1]='\0';
 		char** vuelo = split(linea,',');
-		if(!hash_guardar(hash,vuelo[FLIGHT_NUMBER],(void*)vuelo))return false;
 		char* clave = empaquetar(vuelo);
-		if(!abb_guardar(abb,clave,vuelo[FLIGHT_NUMBER])){
-			free(hash_borrar(hash,vuelo[FLIGHT_NUMBER]));
-			free(clave);
-			return false;
+		bool nuevo_nodo = true;
+		char** datos_anteriores = hash_obtener(hash,vuelo[flight_number]);
+		if(datos_anteriores){
+			char* clave_anterior = empaquetar(datos_anteriores);
+			if(strcmp(clave_anterior,clave)==0) nuevo_nodo = false;
+			else abb_borrar(abb,clave_anterior);
+			free(clave_anterior);
 		}
+		if(nuevo_nodo){
+			if(!abb_guardar(abb,clave,NULL)){
+				free(clave);
+				return false;
+			}
+		}
+		if(!hash_guardar(hash,vuelo[flight_number],(void*)vuelo))return false;
 		free(clave);
 	}
 	free(linea);
