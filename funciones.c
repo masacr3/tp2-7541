@@ -177,6 +177,8 @@ bool ejecutar_operacion(char **comandos,hash_t* hash,abb_t* abb){
 	else if ( strcmp ( comandos[0],"ver_tablero") == 0 )return ver_tablero(comandos,abb);
 
 	else if ( strcmp ( comandos[0],"borrar") == 0 ) return borrar(comandos,abb,hash);
+	
+	else if(strcmp(comandos[0],"ver_arbol")==0) return ver_arbol(abb);
 
 	else if(strcmp(comandos[0],"ver_arbol")==0) return ver_arbol(abb);
 
