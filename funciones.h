@@ -32,6 +32,8 @@ char * empaquetar(char **datos);
 
 //para el abb
 int abb_cmp(const char *a, const char *b);
+//para el iterador externo de abb
+int abb_it_cmp(const char *a, const char *b);
 
 //nose ahre
 int lenstrv(char **strv);

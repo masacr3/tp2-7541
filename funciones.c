@@ -108,7 +108,7 @@ bool ver_tablero(char** comandos,abb_t* abb){
 	char* hasta = comandos[4];
   	int date = 0; //para que no genere colisiones con los define
 	int flight_number = 1; //para que no genere colisiones con los define
-	abb_iter_t* iter = abb_iter_in_crear(abb,modo,desde,hasta);
+	abb_iter_t* iter = abb_iter_in_crear(abb,abb_it_cmp,modo,desde,hasta);
 	if(!iter) return false;
 	int i = 0;
 	while(!abb_iter_in_al_final(iter)&&i<K){
@@ -127,7 +127,7 @@ bool borrar(char **comandos,abb_t* abb,hash_t* hash){
 	char* desde = comandos[1];
 	char* hasta = comandos[2];
 	char* modo = "asc";
-	abb_iter_t* iter = abb_iter_in_crear(abb,modo,desde,hasta);
+	abb_iter_t* iter = abb_iter_in_crear(abb,abb_it_cmp,modo,desde,hasta);
 	lista_t* elem_rango = lista_crear();
 	if(!iter||!elem_rango) return false;
 
@@ -178,8 +178,6 @@ bool ejecutar_operacion(char **comandos,hash_t* hash,abb_t* abb){
 
 	else if ( strcmp ( comandos[0],"borrar") == 0 ) return borrar(comandos,abb,hash);
 	
-	else if(strcmp(comandos[0],"ver_arbol")==0) return ver_arbol(abb);
-
 	else if(strcmp(comandos[0],"ver_arbol")==0) return ver_arbol(abb);
 
 	else return false;
@@ -244,11 +242,26 @@ int abb_cmp(const char *a, const char *b){
 	if (difftime(t1,t2) > 0)i=1;
 	else if (difftime(t1,t2) < 0)i=-1;
 	else{
-		/*
-    if ( strcmp (clave1[1], clave2[1]) == 0) i =0;
-    else if ( strcmp (clave1[1], clave2[1]) < 0) i = -1;
-		else i=1;
-		*/
+		i = strcmp(clave1[1],clave2[1]);
+	}
+
+	free_strv(clave1);
+	free_strv(clave2);
+	return i;
+}
+
+//Suponemos que a,b tienen datos. 
+int abb_it_cmp(const char *a, const char *b){
+	char **clave1 = split(a,',');
+	char **clave2 = split(b,',');
+
+	time_t t1 = iso8601_to_time(clave1[0]); //tiempos
+	time_t t2 = iso8601_to_time(clave2[0]); //tiempos
+	int i=0;
+
+	if (difftime(t1,t2) > 0)i=1;
+	else if (difftime(t1,t2) < 0)i=-1;
+	else{
 		i = 0;
 	}
 
