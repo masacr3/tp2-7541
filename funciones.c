@@ -91,7 +91,27 @@ bool prioridad_vuelos(char **comandos,hash_t* hash){
 	return true;
 }
 
-
+bool ver_tablero(char** comandos,abb_t* abb){
+	if ( lenstrv(comandos) != 5 )return false;
+	int K = atoi(comandos[1]);
+	char* modo = comandos[2];
+	char* desde = comandos[3];
+	char* hasta = comandos[4];
+  int date = 0; //para que no genere colisiones con los define
+  int flight_number = 1; //para que no genere colisiones con los define
+	abb_iter_t* iter = abb_iter_in_crear(abb,modo,desde,hasta);
+	if(!iter) return false;
+	int i = 0;
+	while(!abb_iter_in_al_final(iter)&&i<K){
+		char** vuelo = split(abb_iter_in_ver_actual(iter),',');
+		fprintf(stdout,"%s - %s\n",vuelo[date],vuelo[flight_number]);
+		free_strv(vuelo);
+		abb_iter_in_avanzar(iter);
+		i++;
+	}
+	abb_iter_in_destruir(iter);
+	return true;
+}
 
 bool ejecutar_operacion(char **comandos,hash_t* hash,abb_t* abb){
 	if ( strcmp ( comandos[0],"agregar_archivo") == 0 ) return agregar_archivo(comandos,hash,abb);
@@ -100,7 +120,7 @@ bool ejecutar_operacion(char **comandos,hash_t* hash,abb_t* abb){
 
 	else if ( strcmp ( comandos[0],"prioridad_vuelos") == 0 ) return prioridad_vuelos(comandos,hash);
 
-	//else if ( strcmp ( comandos[0],"ver_tablero") == 0 )return ver_tablero(comandos,abb);
+	else if ( strcmp ( comandos[0],"ver_tablero") == 0 )return ver_tablero(comandos,abb);
 
 	//else if ( strcmp ( comandos[0],"borrar") == 0 ) return borrar(comandos,abb,hash);
 
@@ -162,14 +182,15 @@ int abb_cmp(const char *a, const char *b){
 	time_t t1 = iso8601_to_time(clave1[0]); //tiempos
 	time_t t2 = iso8601_to_time(clave2[0]); //tiempos
 	int i=0;
+
 	if (difftime(t1,t2) > 0)i=1;
 	else if (difftime(t1,t2) < 0)i=-1;
 	else{
-		int flight1 = atoi(clave1[1]);
-		int flight2 = atoi(clave2[1]);
-		if (flight1<flight2)i=-1;
-		else if (flight1>flight2)i=1;
+    if ( strcmp (clave1[1], clave2[1]) == 0) i =0;
+    else if ( strcmp (clave1[1], clave2[1]) < 0) i = -1;
+		else i=1;
 	}
+
 	free_strv(clave1);
 	free_strv(clave2);
 	return i;
