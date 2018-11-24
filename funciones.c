@@ -160,7 +160,10 @@ bool borrar(char **comandos,abb_t* abb,hash_t* hash){
 	if(!iter) return false;
 
 	lista_t* basurero = lista_crear();
-	if(!iter||!basurero) return false;
+	if(!basurero){
+		abb_iter_in_destruir(iter);		
+		return false;
+	}
 
 	while(!abb_iter_in_al_final(iter)){
 		lista_insertar_ultimo(basurero,(void*)abb_iter_in_ver_actual(iter));

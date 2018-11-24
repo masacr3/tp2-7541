@@ -1,11 +1,10 @@
 agregar_archivo vuelos-algueiza-parte-01.csv
-agregar_archivo vuelos-algueiza-parte-02.csv
 info_vuelo 4608
 prioridad_vuelos 3
-ver_arbol
 ver_tablero 5 asc 2018-04-10T23:22:55 2018-08-11T02:42:22
 ver_tablero 5 desc 2018-04-10T23:22:55 2018-08-11T02:42:22
 borrar 2018-04-10T23:22:55 2018-08-11T02:42:22
+agregar_archivo vuelos-algueiza-parte-02.csv
+ver_tablero 5 desc 2018-08-11T02:42:22 2018-04-10T23:22:55
 borrar 2018-04-10T20:22:55 2018-08-11T02:42:22
-ver_arbol
-
+borrar 2018-04-10T20:22:55 2018-08-11T02:42:22
