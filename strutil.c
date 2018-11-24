@@ -120,3 +120,11 @@ void free_strv(char *strv[]){
     }
 	free(strv);
 }
+
+//Devuelve el largo de un vector de cadenas.
+int lenstrv(char **strv){
+	if (!strv) return -1;
+	int len = 0;
+	for(int i = 0; strv[i]; i++) len++;
+	return len;
+}
