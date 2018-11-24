@@ -2,6 +2,7 @@
 
 //Lee el archivo .csv indicado en la línea de comandos y almacena los datos en el sistema.
 bool agregar_archivo(char **comandos, hash_t* hash,abb_t* abb){
+
 	if( lenstrv(comandos) != 2 ) return false; //chequeo cantidad de parametros.
 
 	FILE* archivo = fopen(comandos[1],"r");
@@ -11,13 +12,16 @@ bool agregar_archivo(char **comandos, hash_t* hash,abb_t* abb){
 	size_t cant = 0;
 	ssize_t leidos;
 
+	bool archivo_leido = true;
+
 	while((leidos=getline(&linea,&cant,archivo))>0){
-		linea[leidos-1]='\0';
+		if(linea[leidos-1]=='\n') linea[leidos-1]='\0';
 		char** vuelo = split(linea,',');
 		char* clave = crear_clave_abb(vuelo);
 		bool nuevo_nodo = true; //variable de control p/actualización de datos de vuelo en abb.
 		char** datos_anteriores = hash_obtener(hash,vuelo[FLIGHT_NUMBER]);
 		if( datos_anteriores ){
+			printf("existen datos anteriores\n");
 			char* clave_anterior = crear_clave_abb(datos_anteriores);
 			if (strcmp(clave_anterior,clave)==0) nuevo_nodo = false;
 			else abb_borrar(abb,clave_anterior);
@@ -26,19 +30,21 @@ bool agregar_archivo(char **comandos, hash_t* hash,abb_t* abb){
 		if( nuevo_nodo ){
 			if( !abb_guardar(abb,clave,NULL) ){
 				free(clave);
-				return false;
+				archivo_leido = false;
+				break;
 			}
 		}
 		if( !hash_guardar(hash,vuelo[FLIGHT_NUMBER],(void*)vuelo) ){
 			abb_borrar(abb,clave);
 			free(clave);
-			return false;
+			archivo_leido = false;
+			break;
 		}
 		free(clave);
 	}
 	free(linea);
 	fclose(archivo);
-	return true;
+	return archivo_leido;
 }
 
 //Muestra toda la informacion del vuelo cuyo código de vuelo coincida con el que fue pasado por parametro
