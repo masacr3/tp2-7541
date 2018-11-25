@@ -10,7 +10,7 @@ int main(){
 		if(linea[len_linea-1]=='\n')linea[len_linea-1]='\0';
 		char **comandos = split(linea,' ');
 		bool ok = ejecutar_operacion(comandos,hash,abb);
-		if (!ok) fprintf(stderr,"Error en el comando %s\n",comandos[0]);
+		if (!ok) fprintf(stderr,"Error en comando %s\n",comandos[0]);
 		else fprintf(stdout,"OK\n");
 		free_strv(comandos);
 	}
